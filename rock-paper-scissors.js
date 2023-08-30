@@ -1,5 +1,7 @@
 let playerSelection = null;
 let computerSelection = null;
+let playerScore = 0;
+let computerScore = 0;
 
 function getComputerChoice() {
   let randomNumber = Math.floor(Math.random() * 3); //Randomly choose 0, 1 or 2
@@ -11,6 +13,7 @@ function getComputerChoice() {
   } else {
     computerSelection = "scissors";
   }
+
   return computerSelection;
 }
 
@@ -23,24 +26,33 @@ function getPlayerChoice() {
 function getResult() {
   let a = playerSelection;
   let b = computerSelection;
+  let result = "";
 
   if (a === b) {
     return "It's a tie!";
   } else if (a === "rock" && b === "scissors") {
-    return "You win! Rock beats Scissors!";
+    playerScore++;
+    result = "You won! Rock beats Scissors!";
   } else if (a === "paper" && b === "rock") {
-    return "You win! Paper beats Rock!";
+    playerScore++;
+    result = "You won! Paper beats Rock!";
   } else if (a === "scissors" && b === "paper") {
-    return "You win! Scissors beats Paper!";
+    playerScore++;
+    result = "You won! Scissors beats Paper!";
   } else if (a === "rock" && b === "paper") {
-    return "You lose! Paper beats Rock!";
+    computerScore++;
+    result = "Aw too bad you lost! Paper beats Rock!";
   } else if (a === "paper" && b === "scissors") {
-    return "You lose! Scissors beats Paper!";
+    computerScore++;
+    result = "Aw too bad you lost! Scissors beats Paper!";
   } else if (a === "scissors" && b === "rock") {
-    return "You win! Rock beats Scissors!";
+    computerScore++;
+    result = "Aw too bad you lost! Rock beats Scissors!";
   } else {
-    return "Please choose Rock, Paper or Scissors";
+    result = "Please choose Rock, Paper or Scissors";
   }
+
+  return result;
 }
 
 function game(numberOfGames) {
@@ -48,7 +60,21 @@ function game(numberOfGames) {
     getPlayerChoice();
     getComputerChoice();
     console.log("Game " + i + " result: " + getResult());
+    console.log(playerScore + " : " + computerScore);
   }
+
+  let result = "";
+
+  if (playerScore === computerScore) {
+    result = "It's a tie! Play again!";
+  } else if (playerScore > computerScore) {
+    result = "You won against the computer!";
+  } else if (playerScore < computerScore) {
+    result = "You lost against the computer! Better luck next time.";
+  }
+
+  console.log(result);
+  return result;
 }
 
-console.log(game(3));
+game(5); //Plays the game "n" number of times and displays end result
