@@ -1,0 +1,52 @@
+body {
+  background-color: #fee6b9;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 50px;
+  padding: 50px 50px;
+}
+
+.content {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.rock,
+.paper,
+.scissors {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black;
+  width: 200px;
+  height: 200px;
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: 10px;
+  transition: all 0.2s ease-in-out;
+}
+
+.output {
+  background-color: lightgrey;
+  max-width: 100%;
+  max-height: 100px;
+  min-height: 50px;
+  padding: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  margin-top: 50px;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .rock,
+  .paper,
+  .scissors {
+    max-width: 100px;
+    max-height: 100px;
+  }
+}

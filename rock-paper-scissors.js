@@ -57,10 +57,10 @@ function getResult() {
 
 function game(numberOfGames) {
   for (let i = 1; i <= numberOfGames; i++) {
-    getPlayerChoice();
     getComputerChoice();
+    getPlayerChoice();
     console.log("Game " + i + " result: " + getResult());
-    console.log(playerScore + " : " + computerScore);
+    console.log("Score: " + playerScore + " - " + computerScore);
   }
 
   let result = "";
@@ -74,7 +74,9 @@ function game(numberOfGames) {
   }
 
   console.log(result);
+  console.log("Final score: " + playerScore + "(You)" + " - " + computerScore);
+
   return result;
 }
 
-game(5); //Plays the game "n" number of times and displays end result
+game(5);
