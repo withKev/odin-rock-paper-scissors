@@ -79,4 +79,31 @@ function game(numberOfGames) {
   return result;
 }
 
-game(5);
+const userChoices = ["Rock", "Paper", "Scissors"];
+const content = document.querySelector(".content");
+
+function createDiv(choice) {
+  const div = document.createElement("div");
+  div.classList.add(choice.toLowerCase());
+  div.textContent = choice;
+  content.appendChild(div);
+}
+
+userChoices.forEach((choice) => {
+  createDiv(choice);
+});
+
+let gameOver = false; // if gameOver = true, show playAgain button
+
+function addPlayAgainButton() {
+  const buttons = document.querySelector(".buttons");
+  const playAgainButton = document.createElement("button");
+  playAgainButton.classList.add("playAgain");
+  playAgainButton.textContent = "Play Again";
+
+  buttons.appendChild(playAgainButton);
+}
+
+if (gameOver === true) {
+  addPlayAgainButton();
+}

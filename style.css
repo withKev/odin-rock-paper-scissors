@@ -1,5 +1,6 @@
 body {
   background-color: #fee6b9;
+  padding: 10px;
 }
 
 .header {
@@ -34,12 +35,20 @@ body {
   max-height: 100px;
   min-height: 50px;
   padding: 20px;
-  margin-left: 10px;
-  margin-right: 10px;
   box-sizing: border-box;
   border-radius: 10px;
   margin-top: 50px;
   text-align: center;
+}
+
+.buttons {
+  margin-top: 20px;
+  text-align: right;
+}
+
+button {
+  padding: 5px 10px;
+  border-radius: 5px;
 }
 
 @media (max-width: 600px) {
