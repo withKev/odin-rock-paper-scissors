@@ -1,8 +1,39 @@
+window.addEventListener("load", () => {
+  resetGameValues();
+});
+
 let playerSelection = null;
 let computerSelection = null;
 let playerScore = 0;
 let computerScore = 0;
 let gameOver = false;
+let winOrLoseRound;
+let winOrLoseGame;
+
+const userChoices = ["Rock", "Paper", "Scissors"];
+const content = document.querySelector(".content");
+
+function createDiv(choice) {
+  const div = document.createElement("div");
+  div.classList.add(choice.toLowerCase());
+  div.dataset.choice = choice;
+  div.addEventListener("click", () => {
+    const clickedChoice = div.dataset.choice;
+    getPlayerChoice(clickedChoice);
+  });
+  div.textContent = choice;
+  content.appendChild(div);
+}
+
+userChoices.forEach((choice) => {
+  createDiv(choice);
+});
+
+const confirmButton = document.querySelector(".confirm");
+confirmButton.addEventListener("click", () => {
+  playGame(playerSelection);
+  playerSelection = null;
+});
 
 function getComputerChoice() {
   let randomNumber = Math.floor(Math.random() * 3); //Randomly choose 0, 1 or 2
@@ -24,7 +55,7 @@ function getPlayerChoice(input) {
   return playerSelection;
 }
 
-function updateScore(winner) {
+function updateScoreValues(winner) {
   if (winner === "user") {
     playerScore++;
     return playerScore;
@@ -40,51 +71,48 @@ function getResult() {
   let result = "";
 
   if (a === b) {
-    result = "It's a tie!";
+    result = "It's a tie! Try Again!";
   } else if (a === "rock" && b === "scissors") {
-    updateScore("user");
+    updateScoreValues("user");
     result = "You won! Rock beats Scissors!";
   } else if (a === "paper" && b === "rock") {
-    updateScore("user");
+    updateScoreValues("user");
     result = "You won! Paper beats Rock!";
   } else if (a === "scissors" && b === "paper") {
-    updateScore("user");
+    updateScoreValues("user");
     result = "You won! Scissors beats Paper!";
   } else if (a === "rock" && b === "paper") {
-    updateScore("computer");
+    updateScoreValues("computer");
     result = "Aw too bad you lost! Computer chose Paper!";
   } else if (a === "paper" && b === "scissors") {
-    updateScore("computer");
+    updateScoreValues("computer");
     result = "Aw too bad you lost! Computer chose Scissors!";
   } else if (a === "scissors" && b === "rock") {
-    updateScore("computer");
+    updateScoreValues("computer");
     result = "Aw too bad you lost! Computer chose Rock!";
   } else {
     result = "Please choose Rock, Paper or Scissors";
   }
   console.log(result);
+  winOrLoseRound = result;
   return result;
 }
 
 function getFirstToFive() {
   let result = "";
 
-  if (playerScore >= 1) {
+  if (playerScore >= 2) {
     result = "You won against the computer!";
     gameOver = true;
     console.log(result);
+    winOrLoseGame = result;
     return result;
-  } else if (computerScore >= 1) {
+  } else if (computerScore >= 2) {
     result = "You lost against the computer! Better luck next time.";
     gameOver = true;
     console.log(result);
+    winOrLoseGame = result;
     return result;
-  } else return (gameOver = false);
-}
-
-function showPlayAgainButton() {
-  if (gameOver === true) {
-    addPlayAgainButton();
   } else return (gameOver = false);
 }
 
@@ -94,57 +122,48 @@ function resetGameValues() {
   playerScore = 0;
   computerScore = 0;
   gameOver = false;
-  return "Done.";
+  winOrLoseRound = null;
+  winOrLoseGame = null;
+
+  return "Game Values Reset.";
 }
 
-function clearOutput() {}
+function updateScoreBoard() {
+  const output = document.querySelector(".output");
+  output.textContent =
+    "(You) " + playerScore + " - " + computerScore + " (Computer)";
+  output.classList.add("score");
 
-function newGame() {
-  resetGameValues();
-  removePlayAgainButton();
-  // clearOutput(); // should reset the output box of all values
+  addGameWinnerBanner();
 }
 
-function playGame(choice) {
-  getComputerChoice();
-  playerSelection = choice;
-  getResult();
-  getFirstToFive();
-  showPlayAgainButton();
-  console.log("Score: " + playerScore + " - " + computerScore);
+function addGameWinnerBanner() {
+  const output = document.querySelector(".output");
+  const gameWinner = document.createElement("p");
+  gameWinner.classList.add("score");
+  gameWinner.textContent = winOrLoseGame;
+
+  output.appendChild(gameWinner);
 }
 
-const userChoices = ["Rock", "Paper", "Scissors"];
-const content = document.querySelector(".content");
+function clearOutputBox() {
+  const output = document.querySelector(".output");
+  const gameWinner = document.querySelector(".score");
 
-function createDiv(choice) {
-  const div = document.createElement("div");
-  div.classList.add(choice.toLowerCase());
-  div.dataset.choice = choice;
-  div.addEventListener("click", () => {
-    const clickedChoice = div.dataset.choice;
-    // playGame(clickedChoice.toLowerCase());
-    getPlayerChoice(clickedChoice);
-  });
-  div.textContent = choice;
-  content.appendChild(div);
+  if (gameWinner && gameWinner.parentElement === output) {
+    output.removeChild(gameWinner);
+  }
 }
 
-userChoices.forEach((choice) => {
-  createDiv(choice);
-});
-
-const confirmButton = document.querySelector(".confirm");
-confirmButton.addEventListener("click", () => {
-  playGame(playerSelection);
-  playerSelection = null;
-});
-
-let playAgainButton;
+function showPlayAgainButton() {
+  if (gameOver === true) {
+    addPlayAgainButton();
+  } else return (gameOver = false);
+}
 
 function addPlayAgainButton() {
   const buttons = document.querySelector(".buttons");
-  playAgainButton = document.createElement("button");
+  const playAgainButton = document.createElement("button");
   playAgainButton.classList.add("playAgain");
   playAgainButton.textContent = "Play Again";
   playAgainButton.addEventListener("click", () => {
@@ -156,7 +175,43 @@ function addPlayAgainButton() {
 
 function removePlayAgainButton() {
   const buttons = document.querySelector(".buttons");
-  if (playAgainButton) {
-    buttons.removeChild(playAgainButton);
-  }
+  const playAgainButton = document.querySelector(".playAgain");
+  buttons.removeChild(playAgainButton);
+}
+
+function updateTitle() {
+  const topTitle = document.querySelector(".title");
+  topTitle.textContent = winOrLoseRound;
+}
+
+function resetTitle() {
+  const topTitle = document.querySelector(".title");
+  topTitle.textContent = "Let's Play Rock Paper Scissors!";
+}
+
+function resetMessage() {
+  const outputMessage = document.querySelector(".message");
+  outputMessage.textContent = "Choose an option to play!";
+}
+
+function playGame(choice) {
+  getComputerChoice();
+  playerSelection = choice;
+  getResult();
+  getFirstToFive();
+  updateTitle();
+  updateScoreBoard();
+  showPlayAgainButton();
+  console.log("Score: " + playerScore + " - " + computerScore);
+  console.log(gameOver);
+}
+
+function newGame() {
+  resetGameValues();
+  resetTitle();
+  // resetMessage();
+  removePlayAgainButton();
+  clearOutputBox();
+  updateScoreBoard();
+  console.log(gameOver);
 }
