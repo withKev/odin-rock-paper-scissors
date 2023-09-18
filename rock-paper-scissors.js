@@ -162,15 +162,17 @@ function showPlayAgainButton() {
 }
 
 function addPlayAgainButton() {
-  const buttons = document.querySelector(".buttons");
-  const playAgainButton = document.createElement("button");
-  playAgainButton.classList.add("playAgain");
-  playAgainButton.textContent = "Play Again";
-  playAgainButton.addEventListener("click", () => {
-    newGame();
-  });
+  if (!document.querySelector(".playAgain")) {
+    const buttons = document.querySelector(".buttons");
+    playAgainButton = document.createElement("button");
+    playAgainButton.classList.add("playAgain");
+    playAgainButton.textContent = "Play Again";
+    playAgainButton.addEventListener("click", () => {
+      newGame();
+    });
 
-  buttons.appendChild(playAgainButton);
+    buttons.appendChild(playAgainButton);
+  }
 }
 
 function removePlayAgainButton() {
