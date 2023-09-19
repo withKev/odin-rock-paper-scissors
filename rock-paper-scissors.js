@@ -18,8 +18,10 @@ function createDiv(choice) {
   div.classList.add(choice.toLowerCase());
   div.dataset.choice = choice;
   div.addEventListener("click", () => {
-    const clickedChoice = div.dataset.choice;
-    getPlayerChoice(clickedChoice);
+    if (gameOver === false) {
+      const clickedChoice = div.dataset.choice;
+      getPlayerChoice(clickedChoice);
+    } else return;
   });
   div.textContent = choice;
   content.appendChild(div);
@@ -31,8 +33,10 @@ userChoices.forEach((choice) => {
 
 const confirmButton = document.querySelector(".confirm");
 confirmButton.addEventListener("click", () => {
-  playGame(playerSelection);
-  playerSelection = null;
+  if (gameOver === false) {
+    playGame(playerSelection);
+    playerSelection = null;
+  } else return;
 });
 
 function getComputerChoice() {
@@ -93,7 +97,6 @@ function getResult() {
   } else {
     result = "Please choose Rock, Paper or Scissors";
   }
-  console.log(result);
   winOrLoseRound = result;
   return result;
 }
@@ -106,44 +109,35 @@ function getFirstToFive() {
     gameOver = true;
     console.log(result);
     winOrLoseGame = result;
+    addGameWinnerBanner();
     return result;
   } else if (computerScore >= 2) {
     result = "You lost against the computer! Better luck next time.";
     gameOver = true;
     console.log(result);
     winOrLoseGame = result;
+    addGameWinnerBanner();
     return result;
   } else return (gameOver = false);
 }
 
-function resetGameValues() {
-  playerSelection = null;
-  computerSelection = null;
-  playerScore = 0;
-  computerScore = 0;
-  gameOver = false;
-  winOrLoseRound = null;
-  winOrLoseGame = null;
-
-  return "Game Values Reset.";
-}
-
 function updateScoreBoard() {
-  const output = document.querySelector(".output");
-  output.textContent =
+  const message = document.querySelector(".message");
+  message.textContent =
     "(You) " + playerScore + " - " + computerScore + " (Computer)";
-  output.classList.add("score");
-
-  addGameWinnerBanner();
 }
 
 function addGameWinnerBanner() {
   const output = document.querySelector(".output");
-  const gameWinner = document.createElement("p");
-  gameWinner.classList.add("score");
-  gameWinner.textContent = winOrLoseGame;
+  const existingGameWinner = output.querySelector(".score");
 
-  output.appendChild(gameWinner);
+  if (!existingGameWinner) {
+    const gameWinner = document.createElement("p");
+    gameWinner.classList.add("score", "format");
+    gameWinner.textContent = winOrLoseGame;
+
+    output.appendChild(gameWinner);
+  }
 }
 
 function clearOutputBox() {
@@ -192,8 +186,21 @@ function resetTitle() {
 }
 
 function resetMessage() {
-  const outputMessage = document.querySelector(".message");
-  outputMessage.textContent = "Choose an option to play!";
+  const message = document.querySelector(".message");
+  message.textContent = "Choose an option to play!";
+}
+
+function resetGameValues() {
+  playerSelection = null;
+  computerSelection = null;
+  playerScore = 0;
+  computerScore = 0;
+  gameOver = false;
+  winOrLoseRound = null;
+  winOrLoseGame = null;
+
+  console.log("Game Values Reset.");
+  return "Game Values Reset.";
 }
 
 function playGame(choice) {
@@ -204,16 +211,16 @@ function playGame(choice) {
   updateTitle();
   updateScoreBoard();
   showPlayAgainButton();
+  console.log("Result: " + winOrLoseRound);
   console.log("Score: " + playerScore + " - " + computerScore);
-  console.log(gameOver);
+  console.log("Game over? " + gameOver);
+  console.log("------------------------");
 }
 
 function newGame() {
   resetGameValues();
   resetTitle();
-  // resetMessage();
+  resetMessage();
   removePlayAgainButton();
   clearOutputBox();
-  updateScoreBoard();
-  console.log(gameOver);
 }
