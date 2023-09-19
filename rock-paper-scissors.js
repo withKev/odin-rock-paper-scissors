@@ -21,6 +21,8 @@ function createDiv(choice) {
     if (gameOver === false) {
       const clickedChoice = div.dataset.choice;
       getPlayerChoice(clickedChoice);
+      removeSelectedOption();
+      showSelectedOption(clickedChoice);
     } else return;
   });
   div.textContent = choice;
@@ -30,6 +32,18 @@ function createDiv(choice) {
 userChoices.forEach((choice) => {
   createDiv(choice);
 });
+
+function removeSelectedOption() {
+  const boxes = document.querySelectorAll(".content div");
+  boxes.forEach((box) => {
+    box.classList.remove("selected");
+  });
+}
+
+function showSelectedOption(userChoice) {
+  const selectedBox = document.querySelector(`.${userChoice.toLowerCase()}`);
+  selectedBox.classList.add("selected");
+}
 
 const confirmButton = document.querySelector(".confirm");
 confirmButton.addEventListener("click", () => {
@@ -104,14 +118,14 @@ function getResult() {
 function getFirstToFive() {
   let result = "";
 
-  if (playerScore >= 2) {
+  if (playerScore >= 5) {
     result = "You won against the computer!";
     gameOver = true;
     console.log(result);
     winOrLoseGame = result;
     addGameWinnerBanner();
     return result;
-  } else if (computerScore >= 2) {
+  } else if (computerScore >= 5) {
     result = "You lost against the computer! Better luck next time.";
     gameOver = true;
     console.log(result);
@@ -207,6 +221,7 @@ function playGame(choice) {
   getComputerChoice();
   playerSelection = choice;
   getResult();
+  removeSelectedOption();
   getFirstToFive();
   updateTitle();
   updateScoreBoard();
